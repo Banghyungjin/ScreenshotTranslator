@@ -41,7 +41,7 @@ def config_generator():
         os.mkdir(path)
 
 
-def on_click(x, y, button, pressed):  # 마우스 클릭 읽어오기
+def on_click(x, y, button, pressed):  # 마우스 클릭 좌표 받아오기
     config_parser = configparser.ConfigParser()
     config_parser.read('config.ini')
     if button.left and pressed:
@@ -54,13 +54,25 @@ def on_click(x, y, button, pressed):  # 마우스 클릭 읽어오기
                 config_parser.set('screensize', 'axisX2', str(x))
                 config_parser.set('screensize', 'axisY2', str(y))
                 config_parser.set('mouse_counter', 'value', '0')
-
+                coord_arrange(config_parser)
+                print(config_parser['screensize']['axisX1'], config_parser['screensize']['axisY1'])
+                print(config_parser['screensize']['axisX2'], config_parser['screensize']['axisY2'])
+                listener.stop()
             config_parser.write(configfile)
         configfile.close()
 
 
+def coord_arrange(config_parser):   # 받아온 x, y 좌표를 크기 순으로 재배열
+    if config_parser['screensize']['axisX1'] > config_parser['screensize']['axisX2']:
+        config_parser['screensize']['axisX1'], config_parser['screensize']['axisX2'] = \
+            config_parser['screensize']['axisX2'], config_parser['screensize']['axisX1']
+    if config_parser['screensize']['axisY1'] > config_parser['screensize']['axisY2']:
+        config_parser['screensize']['axisY1'], config_parser['screensize']['axisY2'] = \
+            config_parser['screensize']['axisY2'], config_parser['screensize']['axisY1']
+
+
 if __name__ == '__main__':
     config_generator()
-
+    print('Screenshot Translator by HyungJin Bang\n')
     with mouse.Listener(on_click=on_click) as listener:
         listener.join()
