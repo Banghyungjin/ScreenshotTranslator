@@ -56,24 +56,29 @@ def on_click(x, y, button, pressed):  # 마우스 클릭 x, y 좌표 받아오�
                 config_parser.set('screensize', 'axisY2', str(y))
                 config_parser.set('mouse_counter', 'value', '0')
                 coord_arrange(config_parser)
+                # 확인을 위해 config에 저장 해놓은 좌표 출력
                 print(config_parser['screensize']['axisX1'], config_parser['screensize']['axisY1'])
                 print(config_parser['screensize']['axisX2'], config_parser['screensize']['axisY2'])
-                listener.stop()
-                now = time.localtime()
+                listener.stop()     # 마우스 위치 받아오기 종료
+                now = time.localtime()      # 저장할 스크린샷 이름에 사용할 현재 시간
+                # config directory 위치에 현재 시간을 이름으로 하는 스크린샷 저장
                 pyautogui.screenshot(os.path.join(os.getcwd(),
                                                   config_parser['directory']['directory'],
                                                   "%04d-%02d-%02d_%02d:%02d:%02d.png" % \
                                                   (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min,
                                                    now.tm_sec)
                                                   ),
+                                     # 스크린샷 x좌표, y좌표, 가로 세로 길이 retina display 에서는 좌표, 크기를 2배로 해야함
                                      region=(float(config_parser['screensize']['axisX1']) * 2,
                                              float(config_parser['screensize']['axisY1']) * 2,
                                              (float(config_parser['screensize']['axisX2']) - float(
                                                  config_parser['screensize']['axisX1'])) * 2,
                                              (float(config_parser['screensize']['axisY2']) - float(
                                                  config_parser['screensize']['axisY1'])) * 2))
-            config_parser.write(configfile)
-        configfile.close()
+                # pyautogui.moveTo(float(config_parser['screensize']['axisX1']),
+                #                  float(config_parser['screensize']['axisY1']))
+            config_parser.write(configfile)     # 읽어온 마우스 좌표 config에 저장
+        configfile.close()      # 저장 후 config 닫기
 
 
 def coord_arrange(config_parser):  # 받아온 x, y 좌표를 크기 순으로 재배열
