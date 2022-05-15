@@ -1,11 +1,24 @@
 # made by HyungJin Bang
 
 from pynput import mouse
+from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QWidget
 import configparser
 import time
 import AppKit
 import os
 import pyautogui
+import sys
+
+
+class QtWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.init_ui()
+
+    def init_ui(self):
+        self.setGeometry(300, 300, 640, 480)
+        self.setWindowTitle('Screenshot Translator')
+        self.show()
 
 
 def config_generator():  # 설정파일 만드는 메소드
@@ -92,6 +105,12 @@ def coord_arrange(config_parser):  # 받아온 x, y 좌표를 크기 순으로 �
 
 if __name__ == '__main__':
     config_generator()
-    print('Screenshot Translator by HyungJin Bang\n')
-    with mouse.Listener(on_click=on_click) as listener:
-        listener.join()
+    app = QApplication(sys.argv)
+    window = QtWindow()
+    sys.exit(app.exec())
+    # print('Screenshot Translator by HyungJin Bang\n')
+    # with mouse.Listener(on_click=on_click) as listener:
+    #     listener.join()
+
+
+
