@@ -94,15 +94,15 @@ class ScreenshotTranslator(QWidget):
         open_btn.setToolTip('스크린샷이 저장된 위치를 엽니다.')
         open_btn.clicked.connect(open_directory)  # 버튼이 클릭되면 해당 함수 실행
 
-        set_btn = QPushButton('촬영 범위 설정')
-        set_btn.setToolTip('스크린샷 촬영 범위를 설정합니다')
+        # set_btn = QPushButton('촬영 범위 설정')
+        # set_btn.setToolTip('스크린샷 촬영 범위를 설정합니다')
         # set_btn.clicked.connect(self.get_mouse)  # 버튼이 클릭되면 해당 함수 실행
 
-        reset_cov_btn = QPushButton('촬영 범위 초기화')
-        reset_cov_btn.setToolTip('스크린샷 촬영 범위를 전체 화면 촬영으로 초기화 합니다.')
+        # reset_cov_btn = QPushButton('촬영 범위 초기화')
+        # reset_cov_btn.setToolTip('스크린샷 촬영 범위를 전체 화면 촬영으로 초기화 합니다.')
         # reset_cov_btn.clicked.connect(self.reset_cov)  # 버튼이 클릭되면 해당 함수 실행
 
-        capture_btn = QPushButton('촬영 시작 = Q,  종료 = E')
+        capture_btn = QPushButton('촬영 시작')
         capture_btn.setToolTip('스크린샷 촬영을 시작합니다.')
         capture_btn.setShortcut("q")
         # capture_btn.clicked.connect(self.capture)  # 버튼이 클릭되면 해당 함수 실행
@@ -115,8 +115,8 @@ class ScreenshotTranslator(QWidget):
         box_2 = QHBoxLayout()
         box_2.addStretch(1)
         box_2.addWidget(QLabel(
-            '현재 화면 크기(픽셀) : 가로 X 세로 : ' + str(screen.frame().size.width for screen in AppKit.NSScreen.screens())
-            + ' X ' + str(screen.frame().size.height for screen in AppKit.NSScreen.screens())))  # 현재 화면 크기 출력
+            '현재 화면 크기(픽셀) : 가로 X 세로 : ' + str(AppKit.NSScreen.mainScreen().frame().size.width) \
+            + " X " + str(AppKit.NSScreen.mainScreen().frame().size.height)))  # 현재 화면 크기 출력
         box_2.addStretch(1)
 
         box_3 = QHBoxLayout()
@@ -131,17 +131,17 @@ class ScreenshotTranslator(QWidget):
 
         box_5 = QHBoxLayout()
         box_5.addStretch(1)
-        box_5.addWidget(QLabel("사용법 = 촬영 시작 버튼을 누른 뒤 Ctrl + Alt 를 누를 때 마다 스크린샷이 저장됩니다.\n"
-                               + "스크린샷을 필요한 만큼 촬영한 뒤에는 E를 눌러 촬영을 종료합니다."))
+        box_5.addWidget(QLabel("사용법 = 촬영 시작 버튼을 누른 뒤 화면 에서 촬영 하고자 하는 영역의 대각선 두 꼭짓점을 클릭 해 주세요."))
         box_5.addStretch(1)
         # 그리드 레이아웃 생성
-        grid = QGridLayout()
-        grid.addWidget(save_btn, 0, 0)
-        grid.addWidget(open_btn, 0, 1)
-        grid.addWidget(reset_str_btn, 0, 2)
-        grid.addWidget(set_btn, 1, 0)
-        grid.addWidget(capture_btn, 1, 1)
-        grid.addWidget(reset_cov_btn, 1, 2)
+        row_grid01 = QGridLayout()
+        row_grid01.addWidget(save_btn, 0, 0)
+        row_grid01.addWidget(open_btn, 0, 1)
+        row_grid01.addWidget(reset_str_btn, 0, 2)
+        # grid.addWidget(set_btn, 1, 0)
+        row_grid02 = QGridLayout()
+        row_grid02.addWidget(capture_btn, 0, 0)
+        # grid.addWidget(reset_cov_btn, 1, 2)
 
         vbox = QVBoxLayout()
         vbox.addLayout(box_1)
@@ -149,7 +149,8 @@ class ScreenshotTranslator(QWidget):
         vbox.addLayout(box_4)
         vbox.addLayout(box_3)
         vbox.addLayout(box_5)
-        vbox.addLayout(grid)
+        vbox.addLayout(row_grid01)
+        vbox.addLayout(row_grid02)
 
         self.setLayout(vbox)
         self.setGeometry(300, 300, 640, 480)
